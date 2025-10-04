@@ -1,0 +1,121 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+#root {
+    font-family: "Roboto", sans-serif;
+    background: #121212;
+}
+.app-container {
+    min-height: 100%;
+    height: 100vh;
+    position: relative;
+    background: #121212;
+    color: #e0e0e0;
+}
+.header {
+    padding: 10px;
+}
+.header-title {
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+.header-input-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.header-input::-webkit-inner-spin-button,
+.header-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide in Firefox */
+.header-input[type="number"] {
+  -moz-appearance: textfield;
+}
+.header-btn {
+  background-color: #2b2b2b;
+  border: 1px solid #444;
+  color: #ddd;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.header-btn:hover {
+  background-color: #3a3a3a;
+  border-color: #555;
+  color: #fff;
+}
+
+.header-btn:active {
+  background-color: #3a7db6;
+  color: #fff;
+  border-color: #0e4f87;
+}
+
+.header-input {
+  width: 80px;
+  padding: 6px 10px;
+  border: 1px solid #444;
+  border-radius: 6px;
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  font-size: 14px;
+  text-align: center;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.header-input:focus {
+  border-color: #0e4f87;
+  box-shadow: 0 0 6px rgb(58, 125, 182);
+  background-color: #252525;
+}
+
+.header-count {
+    width: 360px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.header-simulate {
+    margin-left: 20px;
+background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.header-simulate:hover {
+  background-color: #1976d2;
+}
+
+.header-simulate:active {
+  background-color: #1565c0;
+}
+
+.footer {
+    margin-top: 20px;
+    background: #121212;
+}
+.footer-text {
+    font-weight: 500px;
+}
