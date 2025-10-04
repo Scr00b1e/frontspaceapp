@@ -15,9 +15,10 @@ const API_BASE = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000';
 
 function App() {
   const [data, setData] = useState([]);
-  const [greenIncrease, setGreenIncrease] = useState(0);
+  const [greenIncrease, setGreenIncrease] = useState(15);
   const [originalAvgRisk, setOriginalAvgRisk] = useState(0);  // Track baseline
   const center = [20, 0];  // World center (equator, prime meridian)
+    const usa = [37.0902, -95.7129];
   const [currentAvgRisk, setCurrentAvgRisk] = useState(0);  // For post-sim avg
 
   useEffect(() => {
@@ -46,34 +47,57 @@ function App() {
   };
 
   return (
-    <div style={{ height: '100vh', padding: '10px', position: 'relative' }}>
-      <h1>UrbanVitality: Global Urban Heat Risks</h1>
-      <div>
-        <label>Green Increase (%): </label>
-        <input
-          type="number"
-          value={greenIncrease}
-          onChange={(e) => setGreenIncrease(parseFloat(e.target.value) || 0)}
-          min="0"
-          max="50"
-          step="5"
-        />
-        <button onClick={simulate}>Simulate</button>
-        {originalAvgRisk > 0 && (
-          <p>Avg Heat Risk: {currentAvgRisk.toFixed(2)} extreme days/yr 
-            ({((originalAvgRisk - currentAvgRisk) / originalAvgRisk * 100 || 0).toFixed(1)}% reduction from baseline)</p>
-        )}
+    <div className="app-container">
+      <div className="header">
+          <h1 className="header-title">UrbanVitality: Global Urban Heat Risks</h1>
+          <div>
+            <div className="header-count">
+                <label>Green Increase (%): </label>
+                <div className="header-input-group">
+              <button
+                className="header-btn"
+                onClick={() => setGreenIncrease(Math.max(0, greenIncrease - 5))}
+              >
+                –
+              </button>
+
+              <input
+                type="number"
+                className="header-input"
+                value={greenIncrease}
+                onChange={(e) => {const val = e.target.value;
+    setGreenIncrease(val === "" ? "" : parseFloat(val))}}
+                min="0"
+                max="50"
+                step="5"
+              />
+
+              <button
+                className="header-btn"
+                onClick={() => setGreenIncrease(Math.min(50, greenIncrease + 5))}
+              >
+                +
+              </button>
+            </div>
+                <button onClick={simulate} className="header-simulate">Simulate</button>
+            </div>
+            {originalAvgRisk > 0 && (
+              <p>Avg Heat Risk: {currentAvgRisk.toFixed(2)} extreme days/yr
+                ({((originalAvgRisk - currentAvgRisk) / originalAvgRisk * 100 || 0).toFixed(1)}% reduction from baseline)</p>
+            )}
+          </div>
+
+          {/* NASA Logo */}
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg"
+            alt="NASA Logo"
+            style={{ position: 'absolute', top: 10, right: 10, width: 100, height: 'auto', zIndex: 1000 }}
+          />
       </div>
 
-      {/* NASA Logo */}
-      <img
-        src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg"
-        alt="NASA Logo"
-        style={{ position: 'absolute', top: 10, right: 10, width: 100, height: 'auto', zIndex: 1000 }}
-      />
-
-      <MapContainer center={center} zoom={2} style={{ height: '70vh', marginTop: '10px' }}>
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+      <MapContainer center={usa} zoom={3} style={{ height: '70vh', marginTop: '10px' }}>
+        <TileLayer url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png" />
+          {/*<TileLayer url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"/>*/}
         {data.map((point, idx) => {
           const risk = point.heat_risk;
           const color = risk > 0.5 ? 'red' : risk > 0.3 ? 'orange' : 'green';  // Color by risk level
@@ -87,7 +111,10 @@ function App() {
           );
         })}
       </MapContainer>
-      <p>Data from NASA SEDAC (worldwide urban heat events)</p>
+        <div className="footer">
+            <p>Data from NASA SEDAC (worldwide urban heat events)</p>
+            <p>Developed by: Planet Protectors</p>
+        </div>
     </div>
   );
 }
