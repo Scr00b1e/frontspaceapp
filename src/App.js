@@ -113,7 +113,7 @@ function App() {
       </MapContainer>
         <div className="footer">
             <p>Data from NASA SEDAC (worldwide urban heat events)</p>
-            <p>Developed by: Planet Protectors</p>
+            <p>Developed by: CityFlow</p>
         </div>
     </div>
   );
