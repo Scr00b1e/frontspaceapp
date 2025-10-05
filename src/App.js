@@ -17,10 +17,11 @@ function App() {
   const [data, setData] = useState([]);
   const [greenIncrease, setGreenIncrease] = useState(15);
   const [originalAvgRisk, setOriginalAvgRisk] = useState(0);  // Track baseline
-  const usa = [37.0902, -95.7129];  // USA center
+  const center = [20, 0];  // World center (equator, prime meridian)
+    const usa = [37.0902, -95.7129];
   const [currentAvgRisk, setCurrentAvgRisk] = useState(0);  // For post-sim avg
 
-  const loadData = () => {
+  useEffect(() => {
     fetch(`${API_BASE}/api/heat-data`)
       .then(res => res.json())
       .then(fetchedData => {
@@ -28,13 +29,8 @@ function App() {
         const avg = fetchedData.reduce((sum, p) => sum + p.heat_risk, 0) / fetchedData.length || 0;
         setOriginalAvgRisk(avg);
         setCurrentAvgRisk(avg);
-        console.log(`Loaded ${fetchedData.length} new markers`);
       })
       .catch(err => console.error("Fetch error:", err));
-  };
-
-  useEffect(() => {
-    loadData();  // Initial load
   }, []);
 
   const simulate = () => {
@@ -84,24 +80,24 @@ function App() {
               </button>
             </div>
                 <button onClick={simulate} className="header-simulate">Simulate</button>
-                <button onClick={loadData} className="header-generate">Generate</button> {/* New Generate button */}
             </div>
             {originalAvgRisk > 0 && (
               <p>Avg Heat Risk: {currentAvgRisk.toFixed(2)} extreme days/yr
                 ({((originalAvgRisk - currentAvgRisk) / originalAvgRisk * 100 || 0).toFixed(1)}% reduction from baseline)</p>
             )}
           </div>
-      </div>
 
-      {/* NASA Logo */}
-      <img
-        src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg"
-        alt="NASA Logo"
-        style={{ position: 'absolute', top: 10, right: 10, width: 100, height: 'auto', zIndex: 1000 }}
-      />
+          {/* NASA Logo */}
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg"
+            alt="NASA Logo"
+            style={{ position: 'absolute', top: 10, right: 10, width: 100, height: 'auto', zIndex: 1000 }}
+          />
+      </div>
 
       <MapContainer center={usa} zoom={3} style={{ height: '70vh', marginTop: '10px' }}>
         <TileLayer url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png" />
+          {/*<TileLayer url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"/>*/}
         {data.map((point, idx) => {
           const risk = point.heat_risk;
           const color = risk > 0.5 ? 'red' : risk > 0.3 ? 'orange' : 'green';  // Color by risk level
